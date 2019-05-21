@@ -1,0 +1,18 @@
+doctype html
+html(lang='en')
+  block head
+    include header.pug
+
+  body#bodyInit
+    block top
+      div.container-fluid
+        include top.pug
+
+        br
+        br
+        br
+
+        block content
+
+    block footer
+      include footer.pug

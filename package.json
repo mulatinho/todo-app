@@ -1,0 +1,40 @@
+{
+  "name": "todo-app",
+  "version": "1.0.0",
+  "description": "a simple todo app for a recruitment process",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "server": "node_modules/.bin/nodemon index.js",
+    "test": "mocha || true"
+  },
+  "keywords": [
+    "todo",
+    "web",
+    "console"
+  ],
+  "author": "Carlos Alexandre Moura Mulatinho",
+  "license": "GPL-2.0",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cookie-parser": "^1.4.4",
+    "express": "^4.17.0",
+    "express-session": "^1.16.1",
+    "jsonwebtoken": "^8.5.1",
+    "sequelize": "^5.8.6",
+    "sequelize-cli": "^5.4.0",
+    "sqlite3": "^4.0.8"
+  },
+  "devDependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.2",
+    "bootstrap": "^4.3.1",
+    "chai": "^4.2.0",
+    "jquery": "^3.4.1",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.0",
+    "nodeshift": "^3.0.1",
+    "popper.js": "^1.15.0",
+    "pug": "^2.0.3",
+    "supertest": "^4.0.2"
+  }
+}
