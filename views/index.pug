@@ -1,54 +1,145 @@
 extends layout.pug
 
 block content
+  - const taskNow = task ? task : null;
   .container-fluid
     .row
       .offset-lg-2.offset-md-1.offset-sm-0
-      .col-lg-8.col-md-10.col-sm-12.boxCourse
+      .col-lg-8.col-md-10.col-sm-12
         center
-          h1 Todo-App RESTful
+          h1.textOpacity Todo-App RESTful
         br
         br
-          
-        .row
-          .col-sm-10.col-10
-            input.lessz.form-control.input-md.input-xs#searchText(type="text", name="searchText", placeholder="Pesquisar Por..") 
-            | &nbsp; &nbsp;
+        
+        #showTasks(data-href='Tasks')
+          .row
+            .col-sm-10.col-xs-8.col-8.form-group
+              input#searchText.lessz.form-control.input-md(type="text", name="searchText", required='') 
+              label.form-control-placeholder(for="searchText") Search For..
+              | &nbsp; &nbsp;
+              br
+            .offset-sm-0.offset-xs-2.offset-2
+            .col-sm-2.col-2
+              ul.pagination.float-right
+                li.page-item.ldgrey.lessz
+                  a.previous.page-link &lt;
+                li.page-item.ldgrey.lessz
+                  a.next.page-link &gt;
+          .table-responsive
+            table.table.table-hover.table-striped
+              thead
+                th CreatedAt
+                th Title
+                th Owner
+                th Tags
+                th !!!
+              tbody
+                //- each task in taskList
+                //-   tr.click-tr(data-href=task.id)
+                //-     td.lessz= task.created_at
+                //-     td.lessz= task.title
+                //-     td.lessz= task.name
+                //-     td.lessz= task.subtasks_length
+                tr.click-tr(data-href="3471097209194")
+                  td.lessz 2019/09/21 21:00
+                  td.lessz A simple but beautiful task
+                  td.lessz Alexandre Mulatinho
+                  td.lessz linux, bash
+                  td.lessz
+                    i.fa.fa-trash-alt
+                tr.click-tr(data-href="3471097209194")
+                  td.lessz 2019/09/21 21:00
+                  td.lessz A simple but beautiful task
+                  td.lessz Alexandre Mulatinho
+                  td.lessz institutionalized
+                  td.lessz
+                    i.fa.fa-trash-alt
+                tr.click-tr(data-href="3471097209194")
+                  td.lessz 2019/09/21 21:00
+                  td.lessz A simple but beautiful task
+                  td.lessz Alexandre Mulatinho
+                  td.lessz bash, c
+                  td.lessz
+                    i.fa.fa-trash-alt
+          .row
+            .col-sm-4.col-xs-6.col-6
+              button.btn.btn-block.btn-dark.btn-action.lessz(type="button", data-href="AddOrEditTask") Create Task
+            .offset-sm-4.offset-xs-0.offset-0
+            .col-sm-4.col-xs-6.col-6
+              p.float-right.lessz Showing 20 tasks per page at maximum
+        #showAddOrEditTask.hidden(data-href='AddOrEditTask')
+          form#formTask(action="/tasks", method="POST")
+            .row
+              .col
+                center
+                  h3 New Task
+                  br
+            .row
+              .col.form-group
+                input#taskTitle.form-control(type="text", name="taskTitle", required='', value=taskNow ? taskNow.title : "")
+                label.form-control-placeholder(for="taskTitle") Task Title
+                br
+            .row
+              .col.form-group
+                textarea#taskDescription.form-control(type="text", rows="5", name="taskDescription", required='', value=taskNow ? taskNow.description : "")
+                label.form-control-placeholder(for="taskDescription") Task Description
+            .row
+              .col
+                hr(style="border: 0.5px solid #808080; background-color: #00110; width: 100%")
+            .row
+              .col-6
+                p.lessz Tags: 
+                  span#taskTags= taskNow ? taskNow.tags : "none"
+              .col-4.form-group
+                input#taskTagName.form-control.lessz(type="text", name="taskTagName", required='')
+                label.form-control-placeholder.lessz(for="taskTagName") New Tag
+              .col-2
+                button.btn.btn-block.btn-secondary.btn-newtag.lessz(type="button") +
             br
-          .col-sm-2.col-2
-            ul.pagination.float-right
-              li.page-item.ldgrey.lessz
-                a.previous.page-link &lt;
-              li.page-item.ldgrey.lessz
-                a.next.page-link &gt;
-        table.table.table-hover.table-striped.table-responsive-xs
-          thead
-            th CreatedAt
-            th Title
-            th Owner
-            th Subtasks
-          tbody
-            tr
-              td.lessz 2019/09/21 21:00:22
-              td.lessz A simple but beautiful task
-              td.lessz Alexandre Mulatinho
-              td.lessz 2
-            tr
-              td.lessz 2019/09/21 21:00:22
-              td.lessz A simple but beautiful task
-              td.lessz Alexandre Mulatinho
-              td.lessz 2
-            tr
-              td.lessz 2019/09/21 21:00:22
-              td.lessz A simple but beautiful task
-              td.lessz Alexandre Mulatinho
-              td.lessz 2
-              
-        .row
-          .col-sm-4.col-4
-            button.btn.btn-block.btn-dark.lessz(type="button") Create Task
-          .offset-sm-4.offset-4
-          .col-sm-4.col-4
-            p Showing 20 tasks per page
+            .row
+              .col
+                button.btn.btn-block.btn-dark.lessz(type="button") Create Task
+              .col
+                if taskNow
+                  button.btn.btn-block.btn-secondary.lessz(type="button", data-href="Tasks") Delete
+                else
+                  button.btn.btn-block.btn-secondary.btn-action.lessz(type="button", data-href="Tasks") Go Back
+            
+        #showDeleteTask(data-href='DeleteTask').hidden
+          center
+            h3 Attention!
+          br
+          br
+          center
+            p Please take a moment and confirm your action against the task entitled
+            p(style="color: #696969")= taskNow ? taskNow.title : "Not Defined"
+            p Created by 
+              span(style="color: #696969") #{taskNow ? taskNow.name : "Anonymous"} 
+              |  on  
+              span(style="color: #696969") #{taskNow ? taskNow.created_at : "20/09/1969 20:02:12"}
+          br
+          br
+          p Do you really want to delete this task?
+          br
+          .row
+            .col
+              button.btn.btn-block.btn-dark.lessz(type="button") Yes
+            .col
+              button.btn.btn-block.btn-secondary.btn-action.lessz(type="button", data-href="Tasks") No 
+          
       .offset-lg-2.offset-md-1.offset-sm-0
   
+  script.
+    $(document).ready(function() {
+      $(".btn-action").click(function(evt) {
+        const data = "show" + $(this).data("href");
+        console.log(data)
+        $('div[id^="show"]').addClass("hidden")
+        $('#' + data).removeClass("hidden");
+      });
+      
+      $(".click-tr").click(function(evt) {
+        const data = $(this).data("href");
+        console.log(data)
+      });
+    });
