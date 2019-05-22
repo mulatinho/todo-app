@@ -1,4 +1,54 @@
 extends layout.pug
 
 block content
-  h1 Todo App
+  .container-fluid
+    .row
+      .offset-lg-2.offset-md-1.offset-sm-0
+      .col-lg-8.col-md-10.col-sm-12.boxCourse
+        center
+          h1 Todo-App RESTful
+        br
+        br
+          
+        .row
+          .col-sm-10.col-10
+            input.lessz.form-control.input-md.input-xs#searchText(type="text", name="searchText", placeholder="Pesquisar Por..") 
+            | &nbsp; &nbsp;
+            br
+          .col-sm-2.col-2
+            ul.pagination.float-right
+              li.page-item.ldgrey.lessz
+                a.previous.page-link &lt;
+              li.page-item.ldgrey.lessz
+                a.next.page-link &gt;
+        table.table.table-hover.table-striped.table-responsive-xs
+          thead
+            th CreatedAt
+            th Title
+            th Owner
+            th Subtasks
+          tbody
+            tr
+              td.lessz 2019/09/21 21:00:22
+              td.lessz A simple but beautiful task
+              td.lessz Alexandre Mulatinho
+              td.lessz 2
+            tr
+              td.lessz 2019/09/21 21:00:22
+              td.lessz A simple but beautiful task
+              td.lessz Alexandre Mulatinho
+              td.lessz 2
+            tr
+              td.lessz 2019/09/21 21:00:22
+              td.lessz A simple but beautiful task
+              td.lessz Alexandre Mulatinho
+              td.lessz 2
+              
+        .row
+          .col-sm-4.col-4
+            button.btn.btn-block.btn-dark.lessz(type="button") Create Task
+          .offset-sm-4.offset-4
+          .col-sm-4.col-4
+            p Showing 20 tasks per page
+      .offset-lg-2.offset-md-1.offset-sm-0
+  

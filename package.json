@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node .",
     "server": "node_modules/.bin/nodemon index.js",
-    "test": "mocha || true"
+    "test": "mocha --exit || true"
   },
   "keywords": [
     "todo",

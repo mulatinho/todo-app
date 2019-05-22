@@ -6,7 +6,7 @@
 const env  = process.env.NODE_ENV || "development";
 const path = require('path')
 
-var config = {
+const config = {
   development: {
     web: { port: 4000 },
     database: {
@@ -15,12 +15,23 @@ var config = {
         host: 'localhost',
         dialect: 'sqlite',
         storage: __dirname + '/../data/todo_dev.sqlite3',
-        pool: { max: 5, min: 1, idle: 10000 }
+        pool: { max: 5, min: 1, idle: 10000 },
+        logging: console.log
       }
     }
   },
   test: {
-
+    web: { port: 4000 },
+    database: {
+      name: 'todo_dev',
+      options: {
+        host: 'localhost',
+        dialect: 'sqlite',
+        storage: __dirname + '/../data/todo_test.sqlite3',
+        pool: { max: 5, min: 1, idle: 10000 },
+        logging: console.log
+      }
+    }
   }
 };
 

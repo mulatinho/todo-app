@@ -14,8 +14,8 @@ global.defTimeCookie = 60 * 60 * 24 * 7 * 1000;
 //
 
 function routeApi(app, sequelize) {
-  var router1 = express.Router();
-  var v1 = require('./api/v1');
+  let router1 = express.Router();
+  let v1 = require('./api/v1');
 
   v1.connect(router1, sequelize);
   app.use('/', router1);
@@ -28,43 +28,21 @@ function routeApi(app, sequelize) {
 //
 
 function configure(app) {
+
+  // useful hack for get request seconds
   app.use(function(req, res, next) { req.start = new Date(); next(); });
   app.use(expressSession({ secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: { maxAge: 86400 }}));
   app.use(bodyParser.urlencoded({ limit: '3mb', extended: false }));
   app.use(bodyParser.json());
   app.use(cookieParser())
+  // putting things in public
   app.use('/public', express.static(require('path').join(__dirname, '/public')));
   app.use('/public/fontawesome', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/'));
   app.use('/public/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
-  app.use('/.logs/', express.static(require('path').join(__dirname, '/logs')));
+  // setting pug as default engine template
   app.set('views', './views');
   app.set('view engine', 'pug');
   app.disable('x-powered-by');
-}
-
-//
-// Entry point for the application
-//
-
-function main() {
-  var app = express();
-
-  configure(app);
-  routeApi(app, sequelize);
-
-  // synchronize data, remaking the tables if neeeded.
-  db.sequelize.sync({
-    timezone: '-03:00'
-  }).then(function () {
-    var port = config.web.port;
-
-    app.listen(port, function() {
-      console.log('Listen on Port ' + port);
-    });
-  });
-
-  // render 404 view if user browse something unexpected.
-  app.use(function(req, res) { res.status(404).render('404'); });
 
   if ('production' == app.get('env') || 'production' == process.env.NODE_ENV) {
     // production error handler, no stacktraces leaked to user
@@ -83,4 +61,29 @@ function main() {
   }
 }
 
-main();
+//
+// Entry point for the application
+//
+
+let app = express();
+
+configure(app);
+routeApi(app, sequelize);
+
+// synchronize data, remaking the tables if neeeded.
+db.sequelize.authenticate({
+  // timezone: '-03:00'
+}).then(function () {
+  const port = config.web.port;
+
+  if (!module.parent) {
+    app.listen(port, function() {
+      console.log('Listen on Port ' + port);
+    });
+  }
+});
+
+// render 404 view if user browse something unexpected.
+app.use(function(req, res) { res.status(404).render('404'); });
+
+module.exports = app;

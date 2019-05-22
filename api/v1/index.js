@@ -28,10 +28,10 @@ exports.connect = function(router, sequelize) {
   router.get('/', indexPage);
 
   // session
-  router.post('/session/login', sessions.login);
-  router.post('/session/signup', sessions.signup);
-  router.get('/session/github', sessions.authWithGithub);
-  router.get('/session/logout', sessions.destroy);
+  router.post('/sessions/login', sessions.login);
+  router.post('/sessions/signup', sessions.signup);
+  router.get('/sessions/github', sessions.authWithGithub);
+  router.get('/sessions/logout', sessions.destroy);
 
   // tasks
   router.get('/tasks', tasks.get);
