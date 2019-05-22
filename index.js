@@ -37,6 +37,8 @@ function configure(app) {
   app.use(cookieParser())
   // putting things in public
   app.use('/public', express.static(require('path').join(__dirname, '/public')));
+  app.use('/public/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
+  app.use('/public/popper.js', express.static(__dirname + '/node_modules/popper.js/dist/'));
   app.use('/public/fontawesome', express.static(__dirname + '/node_modules/@fortawesome/fontawesome-free/'));
   app.use('/public/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
   // setting pug as default engine template
