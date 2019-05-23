@@ -24,13 +24,13 @@
     "sequelize": "^5.8.6",
     "sequelize-cli": "^5.4.0",
     "pug": "^2.0.3",
+    "@fortawesome/fontawesome-free": "^5.8.2",
+    "bootstrap": "^4.3.1",
+    "jquery": "^3.4.1",
     "sqlite3": "^4.0.8"
   },
   "devDependencies": {
-    "@fortawesome/fontawesome-free": "^5.8.2",
-    "bootstrap": "^4.3.1",
     "chai": "^4.2.0",
-    "jquery": "^3.4.1",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.0",
     "nodeshift": "^3.0.1",
