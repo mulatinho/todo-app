@@ -23,7 +23,7 @@ const config = {
   test: {
     web: { port: 4000 },
     database: {
-      name: 'todo_dev',
+      name: 'todo_test',
       options: {
         host: 'localhost',
         dialect: 'sqlite',
@@ -32,7 +32,20 @@ const config = {
         logging: console.log
       }
     }
-  }
+  },
+  production: {
+    web: { port: 4000 },
+    database: {
+      name: 'todo_prod',
+      options: {
+        host: 'localhost',
+        dialect: 'sqlite',
+        storage: __dirname + '/../data/todo_prod.sqlite3',
+        pool: { max: 5, min: 1, idle: 10000 },
+        logging: console.log
+      }
+    }
+  },
 };
 
 module.exports = config[env];
