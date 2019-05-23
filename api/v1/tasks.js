@@ -23,8 +23,6 @@ exports.get = function(request, response) {
 	let orderBy   = request.query.order || 'DESC';
 	let offset    = page * 20;
 
-	console.log ('--=> ', search.indexOf('tags:'));
-
   GetUser(request, function(userNow) {
     if (!userNow) { return response.status(401).render('401'); }
 

@@ -8,7 +8,7 @@ const path = require('path')
 
 const config = {
   development: {
-    web: { port: 4000 },
+    web: { port: 8080 },
     database: {
       name: 'todo_dev',
       options: {
@@ -21,7 +21,7 @@ const config = {
     }
   },
   test: {
-    web: { port: 4000 },
+    web: { port: 8080 },
     database: {
       name: 'todo_test',
       options: {
@@ -34,7 +34,7 @@ const config = {
     }
   },
   production: {
-    web: { port: 4000 },
+    web: { port: 8080 },
     database: {
       name: 'todo_prod',
       options: {
