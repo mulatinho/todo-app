@@ -20,14 +20,14 @@ describe("login and signup", function() {
   it("login", function(done) {
     supertest(app.listen())
       .get("/sessions/login")
-      .expect(501)
+      .expect(200)
       .end((err, res) => { done(); })
   })
 
   it("signup", function(done) {
     supertest(app.listen())
       .get("/sessions/signup")
-      .expect(501)
+      .expect(200)
       .end((err, res) => { done(); })
   })
 
@@ -50,7 +50,14 @@ describe("tasks", function() {
   it("list tasks", function(done) {
     supertest(app.listen())
       .get("/tasks")
-      .expect(501)
+      .expect(200)
+      .end((err, res) => { done(); })
+  })
+
+  it("tasks with wrong id should return 404", function(done) {
+    supertest(app.listen())
+      .get("/tasks/UNDEFINEDROUTE")
+      .expect(404)
       .end((err, res) => { done(); })
   })
 
