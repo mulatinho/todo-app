@@ -26,7 +26,6 @@ var indexPage = function(request, response)
 exports.connect = function(router, sequelize) {
   var sessions = require('./sessions');
   var tasks    = require('./tasks');
-  var tags     = require('./tags');
 
   //index
   router.get('/', indexPage);
@@ -43,11 +42,6 @@ exports.connect = function(router, sequelize) {
   router.put('/tasks/:id', tasks.update);
   router.delete('/tasks/:id', tasks.destroy);
   router.post('/tasks', tasks.create);
-
-  // tasks
-  router.get('/tags', tags.get);
-  router.post('/tags', tags.create);
-  router.delete('/tags/:id', tags.destroy);
 
   return router;
 }

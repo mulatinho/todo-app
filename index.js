@@ -4,10 +4,10 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const sequelize = require('sequelize');
 const config = require(__dirname + '/config/config.js');
+const fs = require('fs');
 
 process.env.TZ = "America/Recife"
 global.db      = require(__dirname + '/models');
-global.defTimeCookie = 60 * 60 * 24 * 7 * 1000;
 
 //
 // Connect API methods
@@ -28,7 +28,6 @@ function routeApi(app, sequelize) {
 //
 
 function configure(app) {
-
   // useful hack for get request seconds
   app.use(function(req, res, next) { req.start = new Date(); next(); });
   app.use(expressSession({ secret: 'keyboard cat', resave: false, saveUninitialized: true, cookie: { maxAge: 86400 }}));
@@ -45,6 +44,9 @@ function configure(app) {
   app.set('views', './views');
   app.set('view engine', 'pug');
   app.disable('x-powered-by');
+  // creating datadirectory if not exists
+  const datadir = __dirname + '/data';
+  if (!fs.existsSync(datadir)) { fs.mkdir(datadir, () => {}); }
 }
 
 //

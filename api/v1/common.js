@@ -13,7 +13,7 @@
   		where: { session_token: in_session_token },
   		attributes: {exclude: [ "password", "session_token" ]}
   	}).then(function(user) {
-  		if (!user) { console.log('-- user with session_token "' + in_session_token + '" not found here.');	return callback(null); }
+  		if (!user) { return callback(null); }
   		return callback(user);
   	}).catch(error => { console.log(error) });
   }
@@ -54,5 +54,5 @@
 
   	return result;
   }
-  
+
 })();

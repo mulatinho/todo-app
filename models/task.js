@@ -11,6 +11,7 @@ module.exports = function(sequelize, DataTypes) {
     title: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.TEXT, allowNull: true },
     end_date: { type: DataTypes.DATE, allowNull: true },
+    tags: { type: DataTypes.STRING, allowNull: true },
     active: { type: DataTypes.BOOLEAN, defaultValue: true }
   }, {
     underscored: true

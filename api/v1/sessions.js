@@ -23,7 +23,7 @@ exports.login = function(request, response) {
 
     response.cookie("todoid", hashtoken, {maxAge: 60 * 60 * 24 * 7 * 1000});
 
-    return response.json({});
+    return response.json({ session_token: hashtoken });
   }).catch((err) => { console.log(err); return response.status(500).json({}) });
 }
 
@@ -43,7 +43,7 @@ exports.signup = function(request, response) {
   db.user.findOrCreate({
     where: { email: inputEmail, password: hashpass }
   }).spread((userFound, isNew) => {
-    if (!userFound) { return response.status(401).json({}); }
+    if (!userFound) { return response.status(401).render('401'); }
     if (!isNew) { return response.status(400).json({ error_message: 'already registered' })}
 
     userFound.name = data.name || "Anonymous";
@@ -53,7 +53,7 @@ exports.signup = function(request, response) {
 
     userFound.save().then(() => {});
 
-    return response,json({});
+    return response.json({ session_token: hashtoken });
   }).catch((err) => { console.log(err); return response.status(500).json({}) })
 }
 

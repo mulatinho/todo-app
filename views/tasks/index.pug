@@ -28,48 +28,29 @@ block content
           .table-responsive
             table.table.table-hover.table-striped
               thead
-                th CreatedAt
+                th Date
                 th Title
                 th Owner
                 th Tags
                 th.text-center !!!
               tbody
-                //- each task in taskList
-                //-   tr.click-tr(data-href=task.id)
-                //-     td.lessz= task.created_at
-                //-     td.lessz= task.title
-                //-     td.lessz= task.name
-                //-     td.lessz= task.subtasks_length
-                tr
-                  td.lessz 2019/09/21 21:00
-                  td.lessz A simple but beautiful task
-                  td.lessz Alexandre Mulatinho
-                  td.lessz linux, bash
-                  td.lessz
-                    center
-                      i.fa.fa-edit.click-tr(data-href="387391931")
-                      | &nbsp; 
-                      i.fa.fa-trash-alt.click-delete(data-href="UOU")
-                tr
-                  td.lessz 2019/09/21 21:00
-                  td.lessz A simple but beautiful task
-                  td.lessz Alexandre Mulatinho
-                  td.lessz institutionalized
-                  td.lessz
-                    center
-                      i.fa.fa-edit.click-tr(data-href="q389793842")
-                      | &nbsp; 
-                      i.fa.fa-trash-alt.click-delete(data-href="UOU")
-                tr
-                  td.lessz 2019/09/21 21:00
-                  td.lessz A simple but beautiful task
-                  td.lessz Alexandre Mulatinho
-                  td.lessz bash, c
-                  td.lessz
-                    center
-                      i.fa.fa-edit.click-tr(data-href="398147298414")
-                      | &nbsp; 
-                      i.fa.fa-trash-alt.click-delete(data-href="UOU")
+                if taskList
+                  each task in taskList
+                    tr.click-tr(data-href=task.id)
+                      - const options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+                      - const dateformatted = new Intl.DateTimeFormat('en-US', options).format(task.createdAt).replace(/ [AP]M/, '')
+                      td.lessz.nowrap= dateformatted
+                      td.lessz= task.title
+                      td.lessz= task.user.name
+                      td.lessz= task.tags
+                      td.lessz.nowrap
+                        center
+                          i.fa.fa-edit.click-tr(data-href=task.id)
+                          | &nbsp; 
+                          i.fa.fa-trash-alt.click-delete(data-href=task.id)
+            if !taskList.length
+              p None
+              br
           .row
             .col-sm-4.col-xs-6.col-6
               button.btn.btn-block.btn-dark.btn-action.lessz(type="button", data-href="AddOrEditTask") Create Task
@@ -90,7 +71,7 @@ block content
                 br
             .row
               .col.form-group
-                textarea#taskDescription.form-control(type="text", rows="5", name="taskDescription", required='', value=taskNow ? taskNow.description : "")
+                textarea#taskDescription.form-control(type="text", rows="5", name="taskDescription", required='')= taskNow ? taskNow.description : ""
                 label.form-control-placeholder(for="taskDescription") Task Description
             .row
               .col
@@ -107,10 +88,13 @@ block content
             br
             .row
               .col
-                button.btn.btn-block.btn-dark.lessz(type="button") Create Task
+                if taskNow
+                  button.btn.btn-block.btn-dark.lessz.btn-update-task(type="button") Update Task
+                else
+                  button.btn.btn-block.btn-dark.lessz.btn-create-task(type="button") Create Task
               .col
                 if taskNow
-                  button.btn.btn-block.btn-secondary.lessz(type="button", data-href="Tasks") Delete
+                  button.btn.btn-block.btn-secondary.btn-delete-task.lessz(type="button", data-href="Tasks") Delete
                 else
                   button.btn.btn-block.btn-secondary.btn-action.lessz(type="button", data-href="Tasks") Go Back
             
@@ -140,6 +124,47 @@ block content
   
   script.
     $(document).ready(function() {
+      var page        = !{page}	
+      const urlParams = new URLSearchParams(window.location.search);
+      var sortBy      = urlParams.get('sort');
+      var orderBy     = urlParams.get('order');
+      var filterBy    = urlParams.get('search');
+      let tags = []
+      let tagsLiterally = $('#taskTags').text();
+      const taskNow = !{JSON.stringify(taskNow)}
+      
+      if (sortBy === null) { sortBy = "createdAt" }
+      if (filterBy === null) { filterBy = "" }
+      if (orderBy === null) { orderBy = "DESC" }
+      
+      $("#searchText").val(filterBy);
+      
+      $(".previous").click(function() {
+        var gopage = (page - 1) < 0 ? 0 : --page;
+        window.location.href = "/tasks?sort=" + sortBy + "&order=" + orderBy + "&page=" + gopage + "&search=" + filterBy;
+      });
+      
+      $(".next").click(function() {
+        const gopage = ++page;
+        window.location.href = "/tasks?sort=" + sortBy + "&order=" + orderBy + "&page=" + gopage + "&search=" + filterBy;
+      });
+      
+      $('.click-sort').each(function() {
+        const item = $(this).data("href");
+        if (item == sortBy) { 
+          if (orderBy == "DESC") {
+            $(this).append("<i class='fa fa-fw fa-sort-amount-up my-1 float-right'></i>");
+          } else {
+            $(this).append("<i class='fa fa-fw fa-sort-amount-down my-1 float-right'></i>");
+          }
+        }
+      });
+      
+      if (taskNow !== null) {
+        $('div[id^="show"]').addClass("hidden")
+        $('#showAddOrEditTask').removeClass("hidden");
+      }
+      
       $(".btn-action").click(function(evt) {
         const data = "show" + $(this).data("href");
         console.log(data)
@@ -155,8 +180,68 @@ block content
         
       $(".click-tr").click(function(evt) {
         const data = $(this).data("href");
+        window.location.href = `/tasks/${data}`
         console.log(data)
       });
       
+      $('.btn-newtag').click(function(evt) {
+        const taskTagName = $('#taskTagName').val();
+        let tagsNow = [ ...tags, taskTagName ]
+        tags = [ ...new Set(tagsNow) ]
+        
+        tags.forEach(e => {
+          if (!tagsLiterally.length) {
+            tagsLiterally = `${e}`
+          } else {
+            tagsLiterally = `${tagsLiterally}, ${e}`
+          }
+        })
+        
+        $("#taskTags").text(tagsLiterally)
+      });
+      
+      $('.btn-create-task').click(function(evt) {
+        const taskTitle = $('#taskTitle').val();
+        const taskDescription = $('#taskDescription').val();
+        const taskTags = $('#taskTags').text();
+        
+        const data = { taskTitle: taskTitle, taskDescription: taskDescription, taskTags: taskTags };
+        
+        fetch('/tasks', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          console.log(response);
+          if (response.status == 200) { window.location.href = '/tasks'}
+        });
+      })
     
+      $('.btn-update-task').click(function(evt) {
+        const taskTitle = $('#taskTitle').val();
+        const taskDescription = $('#taskDescription').val();
+        const taskTags = $('#taskTags').text();
+        
+        const data = { taskTitle: taskTitle, taskDescription: taskDescription, taskTags: taskTags };
+        const uri = `/tasks/${taskNow.id}`
+          
+        fetch(uri, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        })
+        .then(response => {
+          console.log(response);
+          if (response.status == 200) { window.location.href = '/tasks'}
+        });
+      })
+      
+      $('#searchText').keypress(function(event){
+        var keycode = (event.keyCode ? event.keyCode : event.which);
+        if(keycode == '13'){
+          const searchText = $("#searchText").val();
+          window.location.href = "/tasks?sort=" + sortBy + "&order=" + orderBy + "&page=" + page + "&search=" + searchText;
+        }
+      });
     });
