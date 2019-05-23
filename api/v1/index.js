@@ -3,11 +3,14 @@
     (c) 2019 Alexandre Mulatinho
 */
 
+require('./common.js')
+
+// first view
 var indexPage = function(request, response)
 {
-  if (request.cookies.lid) {
+  if (request.cookies.todoid) {
     db.user.findOne({
-      where: { session_token: request.cookies.lid }
+      where: { session_token: request.cookies.todoid }
     }).then(function(userFound) {
       if (!userFound) {
         return response.render('index', {user: null});
@@ -23,6 +26,7 @@ var indexPage = function(request, response)
 exports.connect = function(router, sequelize) {
   var sessions = require('./sessions');
   var tasks    = require('./tasks');
+  var tags     = require('./tags');
 
   //index
   router.get('/', indexPage);
@@ -36,11 +40,14 @@ exports.connect = function(router, sequelize) {
   // tasks
   router.get('/tasks', tasks.get);
   router.get('/tasks/:id', tasks.get);
-  router.patch('/tasks/:id', tasks.patch);
   router.put('/tasks/:id', tasks.update);
   router.delete('/tasks/:id', tasks.destroy);
   router.post('/tasks', tasks.create);
 
+  // tasks
+  router.get('/tags', tags.get);
+  router.post('/tags', tags.create);
+  router.delete('/tags/:id', tags.destroy);
 
   return router;
 }
