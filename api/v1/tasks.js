@@ -35,7 +35,7 @@ exports.get = function(request, response) {
 			}).then(taskFound => {
 				if (!taskFound) { return response.render('404'); }
 
-				response.render('tasks/index', { user: userNow, task: taskFound })
+				response.render('tasks/index', { user: userNow, task: taskFound, page: page })
 			}).catch(error => { console.log(error) });
 		} else {
 			db.task.findAll({

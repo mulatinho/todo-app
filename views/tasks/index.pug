@@ -124,11 +124,17 @@ block content
   
   script.
     $(document).ready(function() {
-      var page        = !{page}	
-      const urlParams = new URLSearchParams(window.location.search);
-      var sortBy      = urlParams.get('sort');
-      var orderBy     = urlParams.get('order');
-      var filterBy    = urlParams.get('search');
+      var page     = !{page}
+      var sortBy   = null
+      var orderBy  = null
+      var filterBy = null
+      
+      if (window.location.search.indexOf('?') > -1) {
+        const urlParams = new URLSearchParams(window.location.search);
+        sortBy      = urlParams.get('sort');
+        orderBy     = urlParams.get('order');
+        filterBy    = urlParams.get('search');
+      }
       let tags = []
       let tagsLiterally = $('#taskTags').text();
       const taskNow = !{JSON.stringify(taskNow)}
@@ -160,6 +166,7 @@ block content
         }
       });
       
+      console.log(taskNow)
       if (taskNow !== null) {
         $('div[id^="show"]').addClass("hidden")
         $('#showAddOrEditTask').removeClass("hidden");
