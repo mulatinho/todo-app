@@ -1,3 +1,8 @@
+/*
+  Todo-App RESTful API
+    (c) 2019 Alexandre Mulatinho
+*/
+
 const express = require('express');
 const expressSession = require('express-session');
 const bodyParser = require('body-parser');

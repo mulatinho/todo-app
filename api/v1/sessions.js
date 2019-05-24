@@ -1,8 +1,8 @@
 /*
-	Todo-App RESTful API
-		(c) 2019 Alexandre Mulatinho
+  Todo-App RESTful API
+    (c) 2019 Alexandre Mulatinho
 */
-const jsonwebtoken = require('jsonwebtoken');
+
 const crypto = require('crypto');
 
 exports.login = function(request, response) {

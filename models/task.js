@@ -18,9 +18,9 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   task.associate = function(models) {
-		task.belongsTo(models.user, { onDelete: 'cascade', foreignKey: { name: 'user_id', allowNull: false } });
+    task.belongsTo(models.user, { onDelete: 'cascade', foreignKey: { name: 'user_id', allowNull: false } });
     task.belongsTo(models.task, { onDelete: 'cascade', foreignKey: { name: 'task_id', allowNull: true } });
-	}
+  }
 
   return task;
 }
