@@ -128,4 +128,31 @@ exports.destroy = function(request, response) {
 	})
 }
 
-exports.watch = function(request, response) { return response.status(501).json({}); }
+exports.watch = function(request, response) {
+	const task_id = request.params.id || null;
+	let page      = request.query.page || 0;
+	let search    = request.query.search || '';
+	let orderBy   = request.query.order || 'DESC';
+	let offset    = page * 20;
+
+  CheckUser(request, function(userNow) {
+    if (!userNow) { return response.status(401).render('401'); }
+
+		db.task.findAll({
+			where: {
+				[db.Sequelize.Op.or]: [
+					{ title: { [db.Sequelize.Op.like]: `%${search}%` } },
+					{ tags: { [db.Sequelize.Op.like]:  `%${search}%` } }
+				]
+			},
+			limit: 20,
+			offset: offset,
+			include: [
+				{ model: db.user, attributes: [ 'id', 'name', 'email', 'avatar_url' ], as: 'user' }
+			],
+			order: [ [ 'createdAt', orderBy ] ]
+		}).then(taskList => {
+			return response.json(taskList)
+		}).catch(error => { console.log(error) });
+  })
+}

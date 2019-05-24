@@ -7,7 +7,9 @@
 
   CheckUser = function (request, callback) {
   	const in_session_token     = request.cookies.todoid || null;
-    const header_session_token = request.headers['Authorization'] || null;
+    const header_session_token = request.headers['authorization'] || null;
+
+    console.log(in_session_token, header_session_token)
 
   	if (in_session_token == null && header_session_token == null) { return callback(null); }
 
