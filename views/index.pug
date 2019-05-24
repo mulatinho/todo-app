@@ -49,7 +49,7 @@ block content
           .offset-lg-2.offset-sm-1
           .col-lg-8.col-sm-10.col-xs-12
             br
-            p#warnMessage.hidden some of that information typed above are wrong!
+            p#warnMessage.hidden Some of that information typed above are wrong!
             br
             .showLogin(data-href='Login')
               button.btn.btn-block.btn-dark.btn-login.lessz(type="button") Login
@@ -66,11 +66,25 @@ block content
         $('.' + data).removeClass("hidden");
       });
     
+      const checkMail = (email) => {
+        return /^([\w_\.\-\+])+@([\w\-]+\.)+([\w]{2,10})+$/.test(email)
+      }
+      
+      function warnObligatory() { 
+        $("#warnMessage").removeClass("hidden"); 
+        setTimeout(function(){ $("#warnMessage").addClass("hidden") }, 3000)
+      }
+      
       $('.btn-login').click(function() {
         const inputEmail = $('#inputEmail').val();
         const inputPassword = $('#inputPassword').val();
         
         const data = { inputEmail: inputEmail, inputPassword: inputPassword };
+        
+        if (!checkMail(inputEmail)) {
+          warnObligatory();
+          return;
+        }
         
         fetch('/sessions/login', {
           method: 'POST',
@@ -89,6 +103,11 @@ block content
         const inputPassword = $('#inputPassword').val();
         
         const data = { inputName: inputName, inputEmail: inputEmail, inputPassword: inputPassword };
+        
+        if (!checkMail(inputEmail)) {
+          warnObligatory();
+          return;
+        }
         
         fetch('/sessions/signup', {
           method: 'POST',

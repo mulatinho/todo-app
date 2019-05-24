@@ -3,7 +3,7 @@
 		(c) 2019 Alexandre Mulatinho
 */
 
-// function GetUser(request, callback) {
+// function CheckUser(request, callback) {
 // 	var in_session_token = request.cookies.todoid || null;
 // 	if (!in_session_token) { return callback(null); }
 //
@@ -23,7 +23,7 @@ exports.get = function(request, response) {
 	let orderBy   = request.query.order || 'DESC';
 	let offset    = page * 20;
 
-  GetUser(request, function(userNow) {
+  CheckUser(request, function(userNow) {
     if (!userNow) { return response.status(401).render('401'); }
 
 		if (task_id != null) {
@@ -40,10 +40,10 @@ exports.get = function(request, response) {
 		} else {
 			db.task.findAll({
 				where: {
-					[db.Sequelize.Op.or]: {
-						title: { [db.Sequelize.Op.like]: `%${search}%` },
-						tags: { [db.Sequelize.Op.like]:  `%${search}%` }
-					}
+					[db.Sequelize.Op.or]: [
+						{ title: { [db.Sequelize.Op.like]: `%${search}%` } },
+						{ tags: { [db.Sequelize.Op.like]:  `%${search}%` } }
+					]
 				},
 				limit: 20,
 				offset: offset,
@@ -64,7 +64,7 @@ exports.create = function(request, response) {
 	let data = {}
 	if (!validBodyInput(request, data, inputData, ["taskTitle"])) { return response.status(400).json({}) }
 
-	GetUser(request, function(userNow) {
+	CheckUser(request, function(userNow) {
 		if (!userNow) { return response.status(401).render('401'); }
 
 		db.task.findOrCreate({
@@ -89,7 +89,7 @@ exports.update = function(request, response) {
 
 	if (!validBodyInput(request, data, inputData, ["taskTitle"])) { return response.status(400).json({}) }
 
-	GetUser(request, function(userNow) {
+	CheckUser(request, function(userNow) {
 		if (!userNow) { return response.status(401).render('401'); }
 
 		db.task.findOne({
@@ -113,7 +113,7 @@ exports.update = function(request, response) {
 exports.destroy = function(request, response) {
 	const todoid = request.params.id || null;
 
-	GetUser(request, function(userNow) {
+	CheckUser(request, function(userNow) {
 		if (!userNow) { return response.status(401).render('401'); }
 
 		db.task.findOne({
@@ -127,3 +127,5 @@ exports.destroy = function(request, response) {
 		}).catch(error => { console.log(error) });
 	})
 }
+
+exports.watch = function(request, response) { return response.status(501).json({}); }

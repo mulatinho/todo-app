@@ -5,12 +5,19 @@
 
 (function () {
 
-  GetUser = function (request, callback) {
-  	var in_session_token = request.cookies.todoid || null;
-  	if (!in_session_token) { return callback(null); }
+  CheckUser = function (request, callback) {
+  	const in_session_token     = request.cookies.todoid || null;
+    const header_session_token = request.headers['Authorization'] || null;
+
+  	if (in_session_token == null && header_session_token == null) { return callback(null); }
 
   	db.user.findOne({
-  		where: { session_token: in_session_token },
+  		where: {
+        [db.Sequelize.Op.or]: [
+          { session_token: in_session_token },
+          { session_token: header_session_token }
+        ]
+      },
   		attributes: {exclude: [ "password", "session_token" ]}
   	}).then(function(user) {
   		if (!user) { return callback(null); }

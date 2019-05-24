@@ -8,19 +8,13 @@ require('./common.js')
 // first view
 var indexPage = function(request, response)
 {
-  if (request.cookies.todoid) {
-    db.user.findOne({
-      where: { session_token: request.cookies.todoid }
-    }).then(function(userFound) {
-      if (!userFound) {
-        return response.render('index', {user: null});
-      } else {
-        return response.redirect('/tasks');
-      }
-    });
-  } else {
-    response.render('index', {user: null});
-  }
+  CheckUser(request, function(userNow) {
+    if (!userNow) {
+      return response.render('index', {user: null});
+    } else {
+      return response.redirect('/tasks');
+    }
+  })
 }
 
 exports.connect = function(router, sequelize) {
@@ -33,7 +27,6 @@ exports.connect = function(router, sequelize) {
   // session
   router.post('/sessions/login', sessions.login);
   router.post('/sessions/signup', sessions.signup);
-  router.get('/sessions/github', sessions.authWithGithub);
   router.get('/sessions/logout', sessions.destroy);
 
   // tasks
@@ -42,6 +35,9 @@ exports.connect = function(router, sequelize) {
   router.put('/tasks/:id', tasks.update);
   router.delete('/tasks/:id', tasks.destroy);
   router.post('/tasks', tasks.create);
+
+  // tasks
+  router.get('/watch-tasks', tasks.watch);
 
   return router;
 }

@@ -2,6 +2,8 @@ let supertest = require('supertest');
 let expect    = require('chai').expect;
 let app       = require('../index.js');
 
+let token     = "2ea0104355d52fcfcaf4fdc3c14162f27afd5f546bf688c433ae75c748a7856c";
+
 describe("server information", function() {
   before(function () {});
 
@@ -16,32 +18,28 @@ describe("server information", function() {
   })
 });
 
-describe("login and signup", function() {
-  it("login", function(done) {
-    supertest(app.listen())
-      .get("/sessions/login")
-      .expect(200)
-      .end((err, res) => { done(); })
-  })
-
+describe("sinup and login", function() {
   it("signup", function(done) {
     supertest(app.listen())
-      .get("/sessions/signup")
+      .post("/sessions/signup")
+      .send({ inputName: "Alexandre Mulatinho", inputEmail: "alex@mulatinho.net", inputPassword: "someAmazingPassword" })
       .expect(200)
       .end((err, res) => { done(); })
   })
 
-  it("auth with github", function(done) {
+  it("login", function(done) {
     supertest(app.listen())
-      .get("/sessions/github")
-      .expect(501)
+      .post("/sessions/login")
+      .send({ inputEmail: "alex@mulatinho.net", inputPassword: "someAmazingPassword" })
+      .expect(200)
       .end((err, res) => { done(); })
   })
 
   it("logout", function(done) {
     supertest(app.listen())
-      .get("/sessions/logout")
-      .expect(501)
+      .delete("/sessions/logout")
+      .set({ Authorization: token })
+      .expect(200)
       .end((err, res) => { done(); })
   })
 })
