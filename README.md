@@ -13,11 +13,11 @@ To execute this software you just need to type these commands:
     $ npm install
     $ npm start
 
-Then you go at your browser and put the link **http://localhost:4000**
+Then you go at your browser and put the link **http://localhost:8080**
 
 ## Live demo
 
-http://todo-app-todo-app.apps.us-east-2.online-starter.openshift.com
+http://task-task.apps.us-east-2.online-starter.openshift.com/
 
 ## How to Run Tests
 
