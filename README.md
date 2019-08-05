@@ -15,10 +15,6 @@ To execute this software you just need to type these commands:
 
 Then you go at your browser and put the link **http://localhost:8080**
 
-## Live demo
-
-http://task-task.apps.us-east-2.online-starter.openshift.com/
-
 ## How to Run Tests
 
 To run all tests of this software you just need
@@ -58,9 +54,8 @@ You could also pass filters like page and search
 
 ## Screenshots
 
-![](https://i.imgur.com/O07C4kG.png)
+Screenshot 01 | Screenshot 02 | Screenshot 03
+:------------:|:-------------:|:-------------:
+![](https://i.imgur.com/O07C4kG.png) | ![](https://i.imgur.com/yFF5acC.png) | ![](https://i.imgur.com/sw1hDOW.png)
 
-![](https://i.imgur.com/yFF5acC.png)
-
-![](https://i.imgur.com/sw1hDOW.png)
 
